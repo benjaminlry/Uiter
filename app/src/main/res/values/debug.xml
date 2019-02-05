@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="debug_create_msg">Creating !</string>
+    <string name="debug_start_msg">Starting !</string>
+</resources>
