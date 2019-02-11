@@ -24,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
     private AudioManager audio;
     private int maxVolume;
 
+    private static final String STATE_FILTER = "benlry.com.uiter.STATE";
+    private Context context = this;
+
+    private boolean isRun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,38 +59,44 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        Log.d(TAG, getString(R.string.debug_start_msg));
+        Log.i("isRun", getString(R.string.debug_start_msg));
         //mp.start();
         super.onStart();
+
+        isRun = true;
     }
 
     @Override
     protected void onPause() {
+        Log.i("isRun", "Pause !");
         //mp.pause();
+
+        isRun = false;
         super.onPause();
     }
 
 
     public void setVolume(float currentValue) {
+        Log.i("isRun", String.valueOf(isRun));
+        if (isRun){
+            audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            maxVolume = audio.getStreamMaxVolume(audio.STREAM_MUSIC);
 
-        audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        maxVolume = audio.getStreamMaxVolume(audio.STREAM_MUSIC);
+            float valueOutPercent = 0;
 
-        float valueOutPercent = 0;
-
-        if(currentValue >= 0) {
-            valueOutPercent = (currentValue*maxVolume)/170;
-            valueOutPercent += (maxVolume/2);
-            Log.d("testVolume", String.valueOf(Math.round(valueOutPercent)));
+            if(currentValue >= 0) {
+                valueOutPercent = (currentValue*maxVolume)/170;
+                valueOutPercent += (maxVolume/2);
+                Log.d("testVolume", String.valueOf(Math.round(valueOutPercent)));
+            }
+            else {
+                float valuePos = currentValue * -1;
+                valueOutPercent = (valuePos*maxVolume)/170;
+                valueOutPercent = (maxVolume/2) - valueOutPercent;
+                Log.d("testVolume", String.valueOf(Math.round(valueOutPercent)));
+            }
+            audio.setStreamVolume(AudioManager.STREAM_MUSIC, Math.round(valueOutPercent), AudioManager.FLAG_SHOW_UI);
         }
-        else {
-            float valuePos = currentValue * -1;
-            valueOutPercent = (valuePos*maxVolume)/170;
-            valueOutPercent = (maxVolume/2) - valueOutPercent;
-            Log.d("testVolume", String.valueOf(Math.round(valueOutPercent)));
-        }
-        audio.setStreamVolume(AudioManager.STREAM_MUSIC, Math.round(valueOutPercent), AudioManager.FLAG_SHOW_UI);
-
     }
 
 }
