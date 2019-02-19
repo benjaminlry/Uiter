@@ -6,25 +6,32 @@ import android.media.AudioManager;
 import android.util.Log;
 
 import benlry.com.uiteur.MainActivity;
+import benlry.com.uiteur.services.HardwareService;
 
 public class MyBroadcastReceiver extends android.content.BroadcastReceiver {
 
-    MainActivity main;
+    private MainActivity mActivity;
+
 
     public MyBroadcastReceiver(MainActivity main){
-        this.main = main;
+        this.mActivity = main;
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        float currentValue = intent.getFloatExtra("currentValue",0);
 
-        Log.d("currentValue", String.valueOf(currentValue));
-
-        if(main != null){
-            main.setVolume(currentValue);
+        if(intent.getAction() == HardwareService.ACTION_LOCATION) {
+            this.mActivity.displayLocation(intent.getDoubleExtra("lat",0.0), intent.getDoubleExtra("long",0.0));
         } else {
-            Log.i("test","failed");
+            float currentValue = intent.getFloatExtra("currentValue",0);
+
+            if(mActivity != null){
+                mActivity.setVolume(currentValue);
+            } else {
+                Log.i("test","failed");
+            }
         }
+
+
     }
 }

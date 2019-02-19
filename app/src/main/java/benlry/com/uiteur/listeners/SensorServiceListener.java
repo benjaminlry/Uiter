@@ -7,21 +7,16 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import benlry.com.uiteur.services.HardwareService;
 
 public class SensorServiceListener implements SensorEventListener {
 
-    private static final String SENSOR_FILTER = "benlry.com.uiter.SENSOR";
-    private Context context;
+    private HardwareService mService;
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-
-        float currentValue = sensorEvent.values[2];
-
-        Intent intentSensor = new Intent(SENSOR_FILTER);
-        intentSensor.putExtra("currentValue",currentValue);
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intentSensor);
+        mService = new HardwareService();
+        this.mService.notifyOrientation(sensorEvent);
     }
 
     @Override
