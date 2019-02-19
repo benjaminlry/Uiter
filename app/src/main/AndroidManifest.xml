@@ -38,6 +38,7 @@
 
         <service android:name=".services.HardwareService" />
         <service android:name=".services.MediaPlayerService" />
+        <service android:name=".services.MediaLauncher" />
     </application>
 
 </manifest>

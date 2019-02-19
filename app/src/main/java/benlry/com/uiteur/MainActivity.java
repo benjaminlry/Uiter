@@ -15,6 +15,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import benlry.com.uiteur.receivers.MediaPlayerServiceReceiver;
 import benlry.com.uiteur.receivers.MyBroadcastReceiver;
 import benlry.com.uiteur.services.HardwareService;
+import benlry.com.uiteur.services.MediaLauncher;
 import benlry.com.uiteur.services.MediaPlayerService;
 
 import android.net.Uri;
@@ -32,6 +33,7 @@ import static benlry.com.uiteur.services.HardwareService.ACTION_SENSOR;
 public class MainActivity extends AppCompatActivity {
     private final String TAG = MainActivity.class.getSimpleName();
     private MediaPlayer mp;
+    private MediaLauncher ml;
     private static final int PERMISSIONS_REQUEST_CODE = 101;
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private MyBroadcastReceiver mBroadcastReceiver;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i("isRun", "Create !");
 
         mp = MediaPlayer.create(this, R.raw.a);
+        ml = new MediaLauncher();
         setContentView(R.layout.activity_main);
 
         final Button button = findViewById(R.id.playAndPause);
@@ -66,10 +69,10 @@ public class MainActivity extends AppCompatActivity {
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (mp.isPlaying()) {
-                    mp.pause();
+                if (ml.isPlaying(mp)) {
+                    ml.pause(mp);
                 } else {
-                    mp.start();
+                    ml.start(mp);
                 }
             }
         });
